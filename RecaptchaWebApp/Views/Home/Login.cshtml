@@ -1,0 +1,63 @@
+﻿@model LoginViewModel
+@{
+    Layout = null;
+    @inject Microsoft.Extensions.Options.IOptions<GoogleConfigModel> googleConfig
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - RecaptchaWebApp</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="~/Img/LogoForLogin.png" id="icon" alt="User Icon" />
+            </div>
+
+            <!-- Login Form -->
+            <form asp-controller="Home" asp-action="Login" id="LoginForm"
+                  method="POST" class="kt-form">
+                <input type="text" class="fadeIn second" asp-for="Username" placeholder="login">
+                <input type="password" class="fadeIn third" asp-for="Password" placeholder="password">
+                <input type="hidden" asp-for="captcha" />
+                <button class="g-recaptcha btn btn-dark m-2"
+                        data-sitekey="@googleConfig.Value.Key"
+                        data-callback='onSubmit'
+                        data-action='submit'>
+                    Submit
+                </button>
+
+            </form>
+
+            <!-- Remind Passowrd -->
+            <div id="formFooter">
+                <a class="underlineHover" href="#">Forgot Password?</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <script>
+        function onSubmit(token) {
+            $("#captcha").val(token);
+            document.getElementById("LoginForm").submit();
+        }
+
+    </script>
+</body>
+</html>
